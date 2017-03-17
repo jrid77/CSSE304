@@ -79,4 +79,37 @@
 ; Problem 9
 (define sort-list-of-symbols
 	(lambda (los)
-		))
+		(map string->symbol (list-sort string<? (map symbol->string los)))))
+
+; Problem 10
+(define invert
+	(lambda (lop)
+		(map cons (map cadr lop) (map list (map car lop)))))
+
+; Problem 11
+(define vector-index
+	(lambda (pred? vector)
+		(letrec 
+			((vector-helper 
+				(lambda (pred? lst n)
+					(if (null? lst)
+						#f
+						(if (pred? (car lst))
+							n
+							(vector-helper pred? (cdr lst) (+ 1 n)))))))
+			(vector-helper pred? (vector->list vector) 0))))
+
+; Problem 12
+(define ribassoc-helper
+	(lambda (elem lst n)
+		(if (null? lst)
+			#f
+			(if (equal? elem (car lst))
+				n
+				(ribassoc-helper elem (cdr lst) (+ 1 n))))))
+
+(define ribassoc
+	(lambda (s los v fail-value)
+		(if (not (ribassoc-helper s los 0))
+			fail-value
+			(list-ref (vector->list v) (ribassoc-helper s los 0)))))
