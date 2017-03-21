@@ -187,3 +187,71 @@
 				(if (equal? (BST-element bst) num)
 					#t
 					(BST-contains? (BST-left bst) num))))))
+
+
+; Problem 6
+(define map-by-position
+	(lambda (fn-list arg-list)
+		(map (lambda (f arg) (f arg)) fn-list arg-list)))
+
+; Problem 7
+(define bt-leaf-sum
+	(lambda (t)
+		(cond 
+			[(null? t) 0]
+			[(number? t) t]
+			[else (+ (bt-leaf-sum (BST-left t)) (bt-leaf-sum (BST-right t)))])
+		))
+
+(define bt-inorder-list
+	(lambda (t)
+		(cond
+			[(or (null? t) (number? t)) '()]
+			[else (append 
+				(bt-inorder-list (BST-left t)) 
+				(list (BST-element t)) 
+				(bt-inorder-list (BST-right t)))])))
+
+
+(define bt-max
+	(lambda (t)
+		(if (number? t)
+			t
+			(max (bt-max (BST-left t)) (bt-max (BST-right t))))))
+
+(define max-of-two
+	(lambda (t1 t2)
+		(if (> (cadr t1) (cadr t2))
+			t1
+			t2)))
+
+(define max-of-three
+	(lambda (l c r)
+		(cond
+			[(and (null? (car l)) (null? (car r))) (list (car c) (cadr c) (cadr c))]
+			[(null? (car l)) (list (car (max-of-two r c)) (cadr (max-of-two r c)) (cadr c))]
+			[(null? (car r)) (list (car (max-of-two l c)) (cadr (max-of-two l c)) (cadr c))]
+			[(and (>= (cadr l) (cadr c)) (>= (cadr l) (cadr r))) (list (car l) (cadr l) (cadr c))]
+			[(and (>= (cadr r) (cadr c)) (>= (cadr r) (cadr l))) (list (car r) (cadr r) (cadr c))]
+			[else (list (car c) (cadr c) (cadr c))])))
+
+(define bt-max-interior-helper
+	(lambda (t)
+		(if (number? t) 
+			(list '() t t)
+			(let ( 
+				[left (bt-max-interior-helper (BST-left t))]
+				[right (bt-max-interior-helper (BST-right t))]
+			)
+			
+		(max-of-three 
+			left
+			(list 
+				(BST-element t) 
+				(+	(caddr left)
+					(caddr right)))
+			right)))))
+
+(define bt-max-interior
+	(lambda (t)
+		(car (bt-max-interior-helper t))))
