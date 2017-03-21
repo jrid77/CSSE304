@@ -88,3 +88,9 @@
 
 (define length
 	(list-recur 0 (lambda (x y) (add1 y))))
+
+(define filter
+	(lambda (proc)
+		(list-recur '() (lambda (x y) (if (proc x) 
+										  (cons x y)
+										  y)))))

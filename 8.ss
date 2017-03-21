@@ -83,3 +83,11 @@
 							(set! stk (cdr stk))
 							top)]
 						[else (error 'stack "illegeal stack message: " msg)])))))
+
+(define make-slist-leaf-iterator
+	(lambda (slist)
+		(let (
+			[iter slist])			
+			(lambda (msg)
+				(case msg
+					[(next) 1])))))
