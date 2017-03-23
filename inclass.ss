@@ -94,3 +94,9 @@
 		(list-recur '() (lambda (x y) (if (proc x) 
 										  (cons x y)
 										  y)))))
+
+(define h
+	(lambda (ls)
+		(if (null? ls)
+			#f
+			(or (h (cdr ls)) (number? (car ls))))))
