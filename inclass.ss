@@ -95,8 +95,41 @@
 										  (cons x y)
 										  y)))))
 
-(define h
-	(lambda (ls)
-		(if (null? ls)
-			#f
-			(or (h (cdr ls)) (number? (car ls))))))
+; Define Syntax Examples
+
+; (define-syntax <id>
+; 	(syntax-rules ( {<keyword>}* )
+; 		{ [pattern template] }* ))
+
+; Pattern is what is getting expanded and template is what it gets expanded into
+
+(define my-let
+	(syntax-rules ()
+		[(_ ((x v) ...) e1 e2 ...)
+		((lambda (x ...) e1 e2 ...)
+			v ...)]))
+; _ is assumbed to be the name of the form
+; e2 ... means that there can be 0 or more values of e2 used
+; x ... means all of the first elements as a part of that declaration
+
+(define-syntax my-if
+	(syntax-rules (then else)
+		[(_ e1 then e2)
+		(if e1 e2)]
+		[(_ e1 then e2 else e3)
+		(if e1 e2 e3)]
+		))
+
+(define-syntax ++
+	(syntax-rules ()
+		[(_ e1)
+		(begin (set! e1 (add1 e1)) e1)]))
+
+(define-syntax +++
+	(syntax-rules ()
+		[(_ e1)
+		(let ([og e1])
+			(++ e1)
+			og)]))
+
+(define-syntax my-and)

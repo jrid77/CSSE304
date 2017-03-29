@@ -64,4 +64,26 @@
 	(bt-recur (lambda (x) '()) (lambda (x y z) (append x (list (car y)) z))))
 
 
+; Problem 3
+; I originally did this problem with a recursive helper but I read
+; that you said to do it with multiple maps so I adjusted my code 
+; accordingly
+(define list-of-functions
+	(lambda (loc)
+		(map (lambda (x) 
+			(if (equal? #\a x)
+				'car
+				'cdr))
+		loc)))
 
+(define make-c...r
+	(lambda (str)
+		(apply compose (map eval (list-of-functions (string->list str))))))
+
+
+(define compose
+ (case-lambda
+ 	[() (lambda (x) x)]
+	[(first . rest)
+ 		(let ([composed-rest (apply compose rest)])
+ 			(lambda (x) (first (composed-rest x))))]))
