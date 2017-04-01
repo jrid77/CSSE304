@@ -132,4 +132,37 @@
 			(++ e1)
 			og)]))
 
-(define-syntax my-and)
+(define-syntax my-and
+	(syntax-rules ()
+		[(_) #t]
+		[(_ e) e]
+		[(_ e1 e2 ...) 
+		(if e1
+			(my-and e2 ...)
+			#f)]))
+
+(define-syntax for
+	(syntax-rules (:)
+		[(_ ((init ...) : test : update ...)
+			body ...)
+		(begin
+			init ...
+			(let for-loop ()
+				(if test
+					(begin 
+						body ...
+						update ...
+						(for-loop))
+					)))]))
+
+
+; Abstract Datatypes
+
+(define zero list)
+
+(define iszero? null?)
+
+(define pred cdr)
+
+(define succ (lambda (n) (cons #t n)))
+
